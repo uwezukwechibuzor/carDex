@@ -17,7 +17,7 @@ func CmdInitiateAuction() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "initiate-auction [minimum-bid] [car-description] [car-picture-url]",
 		Short: "Broadcast message initiate-auction",
-		Args:  cobra.ExactArgs(7),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 
 			// auto generate AuctionID
