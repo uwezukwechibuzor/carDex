@@ -67,5 +67,8 @@ func (k msgServer) UpdateBid(goCtx context.Context, msg *types.MsgUpdateBid) (*t
 	bid.Creator = msg.Creator
 	bid.CreatedAt = ctx.BlockHeight()
 
-	return &types.MsgUpdateBidResponse{}, nil
+	// emit event
+	err = ctx.EventManager().EmitTypedEvent(msg)
+
+	return &types.MsgUpdateBidResponse{}, err
 }
