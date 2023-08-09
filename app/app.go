@@ -97,7 +97,8 @@ import (
 	dbm "github.com/tendermint/tm-db"
 
 	appparams "github.com/uwezukwechibuzor/carDex/app/params"
-	// this line is used by starport scaffolding # stargate/app/moduleImport
+	
+// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
 const (
@@ -172,7 +173,7 @@ var (
 			),
 		),
 
-		// this line is used by starport scaffolding # stargate/app/moduleBasic
+// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
 	// module account permissions
@@ -184,7 +185,7 @@ var (
 		ccvconsumertypes.ConsumerToSendToProviderName: nil,
 		wasm.ModuleName:                               {authtypes.Burner},
 
-		// this line is used by starport scaffolding # stargate/app/maccPerms
+// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
 
@@ -247,7 +248,7 @@ type CarDexApp struct {
 
 	WasmKeeper wasm.Keeper
 
-	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
+// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// mm is the module manager
 	mm *module.Manager
@@ -298,7 +299,7 @@ func NewCarDexApp(
 		adminmodulemoduletypes.StoreKey,
 		wasm.StoreKey,
 
-		// this line is used by starport scaffolding # stargate/app/storeKey
+// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -508,7 +509,8 @@ func NewCarDexApp(
 		wasmOpts...,
 	)
 
-	// this line is used by starport scaffolding # stargate/app/keeperDefinition
+
+		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := ibcporttypes.NewRouter()
@@ -551,7 +553,7 @@ func NewCarDexApp(
 		adminModule,
 		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.AccountKeeper, app.BankKeeper),
 
-		// this line is used by starport scaffolding # stargate/app/appModule
+// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -578,7 +580,7 @@ func NewCarDexApp(
 		adminmodulemoduletypes.ModuleName,
 		wasm.ModuleName,
 
-		// this line is used by starport scaffolding # stargate/app/beginBlockers
+// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -600,7 +602,7 @@ func NewCarDexApp(
 		adminmodulemoduletypes.ModuleName,
 		wasm.ModuleName,
 
-		// this line is used by starport scaffolding # stargate/app/endBlockers
+// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -627,7 +629,7 @@ func NewCarDexApp(
 		adminmodulemoduletypes.ModuleName,
 		wasm.ModuleName,
 
-		// this line is used by starport scaffolding # stargate/app/initGenesis
+// this line is used by starport scaffolding # stargate/app/initGenesis
 	)
 
 	// Uncomment if you want to set a custom migration order here.
@@ -653,7 +655,7 @@ func NewCarDexApp(
 		transferModule,
 		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.AccountKeeper, app.BankKeeper),
 
-		// this line is used by starport scaffolding # stargate/app/appModule
+// this line is used by starport scaffolding # stargate/app/appModule
 	)
 	app.sm.RegisterStoreDecoders()
 
@@ -872,7 +874,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ccvconsumertypes.ModuleName)
 	paramsKeeper.Subspace(wasm.ModuleName)
 
-	// this line is used by starport scaffolding # stargate/app/paramSubspace
+// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
 }
