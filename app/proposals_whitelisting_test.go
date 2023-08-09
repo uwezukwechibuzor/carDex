@@ -27,7 +27,7 @@ func TestConsumerWhitelistingKeys(t *testing.T) {
 
 func SetupTestingAppConsumer() (ibctesting.TestingApp, map[string]json.RawMessage) {
 	encoding := app.MakeEncodingConfig()
-	testApp := app.NewReApp(
+	testApp := app.NewCarDexApp(
 		log.NewNopLogger(),
 		tmdb.NewMemDB(),
 		nil,

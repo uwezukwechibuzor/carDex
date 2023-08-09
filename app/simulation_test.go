@@ -72,7 +72,7 @@ func BenchmarkSimulation(b *testing.B) {
 
 	encoding := app.MakeEncodingConfig()
 
-	app := app.NewReApp(
+	app := app.NewCarDexApp(
 		logger,
 		db,
 		nil,

@@ -211,7 +211,7 @@ func (ac appCreator) newApp(
 	enabledWasmProposals := app.GetEnabledProposals()
 	logger.Info("Enabled wasm proposals", "proposals", enabledWasmProposals)
 
-	return app.NewReApp(logger, db, traceStore, true, skipUpgradeHeights,
+	return app.NewCarDexApp(logger, db, traceStore, true, skipUpgradeHeights,
 		cast.ToString(appOpts.Get(flags.FlagHome)),
 		cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod)),
 		ac.encCfg,
@@ -249,7 +249,7 @@ func (ac appCreator) appExport(
 
 	loadLatest := height == -1
 	var emptyWasmOpts []wasm.Option
-	interchainapp = app.NewReApp(
+	interchainapp = app.NewCarDexApp(
 		logger,
 		db,
 		traceStore,

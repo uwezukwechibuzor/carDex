@@ -30,7 +30,7 @@ func NewProviderConsumerCoordinator(t *testing.T) (*ibctesting.Coordinator, *ibc
 func SetupTestingApp() (ibctesting.TestingApp, map[string]json.RawMessage) {
 	encoding := app.MakeEncodingConfig()
 	db := dbm.NewMemDB()
-	testApp := app.NewReApp(
+	testApp := app.NewCarDexApp(
 		log.NewNopLogger(),
 		db,
 		nil,

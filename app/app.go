@@ -258,7 +258,7 @@ type CarDexApp struct {
 }
 
 // New returns a reference to an initialized blockchain app
-func NewReApp(
+func NewCarDexApp(
 	logger log.Logger,
 	db dbm.DB,
 	traceStore io.Writer,
