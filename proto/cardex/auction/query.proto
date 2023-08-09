@@ -1,26 +1,58 @@
 syntax = "proto3";
+
 package uwezukwechibuzor.cardex.auction;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "cardex/auction/params.proto";
+import "cardex/auction/auction.proto";
 
 option go_package = "github.com/uwezukwechibuzor/carDex/x/auction/types";
 
 // Query defines the gRPC querier service.
 service Query {
+  
   // Parameters queries the parameters of the module.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+  rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/uwezukwechibuzor/carDex/auction/params";
+  
+  }
+  
+  // Queries a list of Auction items.
+  rpc Auction    (QueryGetAuctionRequest) returns (QueryGetAuctionResponse) {
+    option (google.api.http).get = "/uwezukwechibuzor/carDex/auction/auction/{auctionID}";
+  
+  }
+  rpc AuctionAll (QueryAllAuctionRequest) returns (QueryAllAuctionResponse) {
+    option (google.api.http).get = "/uwezukwechibuzor/carDex/auction/auction";
+  
   }
 }
-
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
 
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
+  
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
 }
+
+message QueryGetAuctionRequest {
+   string auctionID = 1;
+}
+
+message QueryGetAuctionResponse {
+  Auction Auction = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllAuctionRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllAuctionResponse {
+  repeated Auction                                Auction    = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+

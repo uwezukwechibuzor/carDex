@@ -1,0 +1,15 @@
+syntax = "proto3";
+package uwezukwechibuzor.cardex.auction;
+
+option go_package = "github.com/uwezukwechibuzor/carDex/x/auction/types";
+
+message Auction {
+  string auctionID = 1; 
+  string minimumBid = 2; 
+  string bid = 3; 
+  string auctionDuration = 4; 
+  string carDescription = 5; 
+  string carPictureUrl = 6; 
+  string status = 7;
+  string creator = 8; 
+}
