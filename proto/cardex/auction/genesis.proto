@@ -1,0 +1,12 @@
+syntax = "proto3";
+package uwezukwechibuzor.cardex.auction;
+
+import "gogoproto/gogo.proto";
+import "cardex/auction/params.proto";
+
+option go_package = "github.com/uwezukwechibuzor/carDex/x/auction/types";
+
+// GenesisState defines the auction module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+}

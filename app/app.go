@@ -97,8 +97,11 @@ import (
 	dbm "github.com/tendermint/tm-db"
 
 	appparams "github.com/uwezukwechibuzor/carDex/app/params"
-	
-// this line is used by starport scaffolding # stargate/app/moduleImport
+
+	auctionmodule "github.com/uwezukwechibuzor/carDex/x/auction"
+	auctionmodulekeeper "github.com/uwezukwechibuzor/carDex/x/auction/keeper"
+	auctionmoduletypes "github.com/uwezukwechibuzor/carDex/x/auction/types"
+	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
 const (
@@ -173,7 +176,8 @@ var (
 			),
 		),
 
-// this line is used by starport scaffolding # stargate/app/moduleBasic
+		auctionmodule.AppModuleBasic{},
+		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
 	// module account permissions
@@ -185,7 +189,8 @@ var (
 		ccvconsumertypes.ConsumerToSendToProviderName: nil,
 		wasm.ModuleName:                               {authtypes.Burner},
 
-// this line is used by starport scaffolding # stargate/app/maccPerms
+		auctionmoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
+		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
 
@@ -248,7 +253,8 @@ type CarDexApp struct {
 
 	WasmKeeper wasm.Keeper
 
-// this line is used by starport scaffolding # stargate/app/keeperDeclaration
+	AuctionKeeper auctionmodulekeeper.Keeper
+	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// mm is the module manager
 	mm *module.Manager
@@ -299,7 +305,8 @@ func NewCarDexApp(
 		adminmodulemoduletypes.StoreKey,
 		wasm.StoreKey,
 
-// this line is used by starport scaffolding # stargate/app/storeKey
+		auctionmoduletypes.StoreKey,
+		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -509,8 +516,17 @@ func NewCarDexApp(
 		wasmOpts...,
 	)
 
+	app.AuctionKeeper = *auctionmodulekeeper.NewKeeper(
+		appCodec,
+		keys[auctionmoduletypes.StoreKey],
+		keys[auctionmoduletypes.MemStoreKey],
+		app.GetSubspace(auctionmoduletypes.ModuleName),
 
-		// this line is used by starport scaffolding # stargate/app/keeperDefinition
+		app.BankKeeper,
+	)
+	auctionModule := auctionmodule.NewAppModule(appCodec, app.AuctionKeeper, app.AccountKeeper, app.BankKeeper)
+
+	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := ibcporttypes.NewRouter()
@@ -553,7 +569,8 @@ func NewCarDexApp(
 		adminModule,
 		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.AccountKeeper, app.BankKeeper),
 
-// this line is used by starport scaffolding # stargate/app/appModule
+		auctionModule,
+		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -580,7 +597,8 @@ func NewCarDexApp(
 		adminmodulemoduletypes.ModuleName,
 		wasm.ModuleName,
 
-// this line is used by starport scaffolding # stargate/app/beginBlockers
+		auctionmoduletypes.ModuleName,
+		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -602,7 +620,8 @@ func NewCarDexApp(
 		adminmodulemoduletypes.ModuleName,
 		wasm.ModuleName,
 
-// this line is used by starport scaffolding # stargate/app/endBlockers
+		auctionmoduletypes.ModuleName,
+		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -629,7 +648,8 @@ func NewCarDexApp(
 		adminmodulemoduletypes.ModuleName,
 		wasm.ModuleName,
 
-// this line is used by starport scaffolding # stargate/app/initGenesis
+		auctionmoduletypes.ModuleName,
+		// this line is used by starport scaffolding # stargate/app/initGenesis
 	)
 
 	// Uncomment if you want to set a custom migration order here.
@@ -655,7 +675,8 @@ func NewCarDexApp(
 		transferModule,
 		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.AccountKeeper, app.BankKeeper),
 
-// this line is used by starport scaffolding # stargate/app/appModule
+		auctionModule,
+		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 	app.sm.RegisterStoreDecoders()
 
@@ -874,7 +895,8 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ccvconsumertypes.ModuleName)
 	paramsKeeper.Subspace(wasm.ModuleName)
 
-// this line is used by starport scaffolding # stargate/app/paramSubspace
+	paramsKeeper.Subspace(auctionmoduletypes.ModuleName)
+	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
 }

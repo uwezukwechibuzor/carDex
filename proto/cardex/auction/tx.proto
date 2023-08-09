@@ -1,0 +1,7 @@
+syntax = "proto3";
+package uwezukwechibuzor.cardex.auction;
+
+option go_package = "github.com/uwezukwechibuzor/carDex/x/auction/types";
+
+// Msg defines the Msg service.
+service Msg {}
