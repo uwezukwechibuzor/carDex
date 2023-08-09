@@ -14,7 +14,7 @@ import (
 
 // ExportAppStateAndValidators implements the simapp app interface
 // by exporting the state of the application
-func (app *ReApp) ExportAppStateAndValidators(
+func (app *CarDexApp) ExportAppStateAndValidators(
 	forZeroHeight bool, jailAllowedAddrs []string,
 ) (servertypes.ExportedApp, error) {
 	// as if they could withdraw from the start of the next block
@@ -51,7 +51,7 @@ func (app *ReApp) ExportAppStateAndValidators(
 // NOTE zero height genesis is a temporary feature which will be deprecated
 //
 //	in favour of export at a block height
-func (app *ReApp) prepForZeroHeightGenesis(ctx sdk.Context, _ []string) {
+func (app *CarDexApp) prepForZeroHeightGenesis(ctx sdk.Context, _ []string) {
 	/* Just to be safe, assert the invariants on current state. */
 	app.CrisisKeeper.AssertInvariants(ctx)
 
@@ -76,7 +76,7 @@ func (app *ReApp) prepForZeroHeightGenesis(ctx sdk.Context, _ []string) {
 }
 
 // GetValidatorSet returns a slice of bonded validators.
-func (app *ReApp) GetValidatorSet(ctx sdk.Context) ([]tmtypes.GenesisValidator, error) {
+func (app *CarDexApp) GetValidatorSet(ctx sdk.Context) ([]tmtypes.GenesisValidator, error) {
 	cVals := app.ConsumerKeeper.GetAllCCValidator(ctx)
 	if len(cVals) == 0 {
 		return nil, fmt.Errorf("empty validator set")

@@ -16,7 +16,7 @@ import (
 func TestConsumerWhitelistingKeys(t *testing.T) {
 	_ = app.GetDefaultConfig()
 	chain := ibctesting.NewTestChain(t, ibctesting.NewCoordinator(t, 0), SetupTestingAppConsumer, "test")
-	paramKeeper := chain.App.(*app.ReApp).ParamsKeeper
+	paramKeeper := chain.App.(*app.CarDexApp).ParamsKeeper
 	for paramKey := range app.WhitelistedParams {
 		ss, ok := paramKeeper.GetSubspace(paramKey.Subspace)
 		require.True(t, ok, "Unknown subspace %s", paramKey.Subspace)

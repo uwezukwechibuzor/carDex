@@ -18,7 +18,7 @@ func (ao EmptyAppOptions) Get(o string) interface{} {
 	return nil
 }
 
-func Setup(isCheckTx bool) *ReApp {
+func Setup(isCheckTx bool) *CarDexApp {
 	db := dbm.NewMemDB()
 	app := NewReApp(log.NewNopLogger(), db, nil, true, map[int64]bool{}, DefaultNodeHome, 5, MakeEncodingConfig(), GetEnabledProposals(), simapp.EmptyAppOptions{}, nil)
 	if !isCheckTx {

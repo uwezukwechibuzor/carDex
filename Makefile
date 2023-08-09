@@ -107,7 +107,7 @@ build-static-linux-amd64: go.sum $(BUILDDIR)/
 		--build-arg BUILD_TAGS=$(build_tags_comma_sep) \
 		--build-arg ENABLED_PROPOSALS=$(ENABLED_PROPOSALS) \
 		--platform linux/amd64 \
-		-t re-amd64 \
+		-t cardex-amd64 \
 		--load \
 		-f Dockerfile.builder .
 	$(DOCKER) rm -f cardexbinary || true
@@ -213,7 +213,7 @@ init: kill-dev install-test-binary
 
 start: kill-dev install-test-binary
 	@echo "Starting up neutrond alone..."
-	export BINARY=neutrond CHAINID=test-1 P2PPORT=26656 RPCPORT=26657 RESTPORT=1317 ROSETTA=8080 GRPCPORT=8090 GRPCWEB=8091 STAKEDENOM=ure && \
+	export BINARY=neutrond CHAINID=test-1 P2PPORT=26656 RPCPORT=26657 RESTPORT=1317 ROSETTA=8080 GRPCPORT=8090 GRPCWEB=8091 STAKEDENOM=ucardex && \
 	./network/init.sh && ./network/init-cardexd.sh && ./network/start.sh
 
 start-rly:

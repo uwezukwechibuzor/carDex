@@ -189,9 +189,9 @@ var (
 )
 
 var (
-	_ servertypes.Application = (*ReApp)(nil)
-	_ simapp.App              = (*ReApp)(nil)
-	_ ibctesting.TestingApp   = (*ReApp)(nil)
+	_ servertypes.Application = (*CarDexApp)(nil)
+	_ simapp.App              = (*CarDexApp)(nil)
+	_ ibctesting.TestingApp   = (*CarDexApp)(nil)
 )
 
 func init() {
@@ -206,7 +206,7 @@ func init() {
 // App extends an ABCI application, but with most of its parameters exported.
 // They are exported for convenience in creating helper functions, as object
 // capabilities aren't needed for testing.
-type ReApp struct {
+type CarDexApp struct {
 	*baseapp.BaseApp
 
 	cdc               *codec.LegacyAmino
@@ -271,7 +271,7 @@ func NewReApp(
 	appOpts servertypes.AppOptions,
 	wasmOpts []wasm.Option,
 	baseAppOptions ...func(*baseapp.BaseApp),
-) *ReApp {
+) *CarDexApp {
 	appCodec := encodingConfig.Marshaler
 	cdc := encodingConfig.Amino
 	interfaceRegistry := encodingConfig.InterfaceRegistry
@@ -303,7 +303,7 @@ func NewReApp(
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
 
-	app := &ReApp{
+	app := &CarDexApp{
 		BaseApp:           bApp,
 		cdc:               cdc,
 		appCodec:          appCodec,
@@ -725,23 +725,23 @@ func NewReApp(
 }
 
 // Name returns the name of the App
-func (app *ReApp) Name() string { return app.BaseApp.Name() }
+func (app *CarDexApp) Name() string { return app.BaseApp.Name() }
 
 // GetBaseApp returns the base app of the application
-func (app ReApp) GetBaseApp() *baseapp.BaseApp { return app.BaseApp }
+func (app CarDexApp) GetBaseApp() *baseapp.BaseApp { return app.BaseApp }
 
 // BeginBlocker application updates every begin block
-func (app *ReApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
+func (app *CarDexApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
 	return app.mm.BeginBlock(ctx, req)
 }
 
 // EndBlocker application updates every end block
-func (app *ReApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
+func (app *CarDexApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
 	return app.mm.EndBlock(ctx, req)
 }
 
 // InitChainer application update at chain initialization
-func (app *ReApp) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
+func (app *CarDexApp) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 	var genesisState GenesisState
 	if err := tmjson.Unmarshal(req.AppStateBytes, &genesisState); err != nil {
 		panic(err)
@@ -751,12 +751,12 @@ func (app *ReApp) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.R
 }
 
 // LoadHeight loads a particular height
-func (app *ReApp) LoadHeight(height int64) error {
+func (app *CarDexApp) LoadHeight(height int64) error {
 	return app.LoadVersion(height)
 }
 
 // ModuleAccountAddrs returns all the app's module account addresses.
-func (app *ReApp) ModuleAccountAddrs() map[string]bool {
+func (app *CarDexApp) ModuleAccountAddrs() map[string]bool {
 	modAccAddrs := make(map[string]bool)
 	for acc := range maccPerms {
 		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
@@ -767,7 +767,7 @@ func (app *ReApp) ModuleAccountAddrs() map[string]bool {
 
 // BlockedModuleAccountAddrs returns all the app's blocked module account
 // addresses.
-func (app *ReApp) BlockedModuleAccountAddrs() map[string]bool {
+func (app *CarDexApp) BlockedModuleAccountAddrs() map[string]bool {
 	modAccAddrs := app.ModuleAccountAddrs()
 	return modAccAddrs
 }
@@ -776,7 +776,7 @@ func (app *ReApp) BlockedModuleAccountAddrs() map[string]bool {
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
-func (app *ReApp) LegacyAmino() *codec.LegacyAmino {
+func (app *CarDexApp) LegacyAmino() *codec.LegacyAmino {
 	return app.cdc
 }
 
@@ -784,47 +784,47 @@ func (app *ReApp) LegacyAmino() *codec.LegacyAmino {
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
-func (app *ReApp) AppCodec() codec.Codec {
+func (app *CarDexApp) AppCodec() codec.Codec {
 	return app.appCodec
 }
 
 // InterfaceRegistry returns an InterfaceRegistry
-func (app *ReApp) InterfaceRegistry() types.InterfaceRegistry {
+func (app *CarDexApp) InterfaceRegistry() types.InterfaceRegistry {
 	return app.interfaceRegistry
 }
 
 // GetKey returns the KVStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *ReApp) GetKey(storeKey string) *storetypes.KVStoreKey {
+func (app *CarDexApp) GetKey(storeKey string) *storetypes.KVStoreKey {
 	return app.keys[storeKey]
 }
 
 // GetTKey returns the TransientStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *ReApp) GetTKey(storeKey string) *storetypes.TransientStoreKey {
+func (app *CarDexApp) GetTKey(storeKey string) *storetypes.TransientStoreKey {
 	return app.tkeys[storeKey]
 }
 
 // GetMemKey returns the MemStoreKey for the provided mem key.
 //
 // NOTE: This is solely used for testing purposes.
-func (app *ReApp) GetMemKey(storeKey string) *storetypes.MemoryStoreKey {
+func (app *CarDexApp) GetMemKey(storeKey string) *storetypes.MemoryStoreKey {
 	return app.memKeys[storeKey]
 }
 
 // GetSubspace returns a param subspace for a given module name.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *ReApp) GetSubspace(moduleName string) paramstypes.Subspace {
+func (app *CarDexApp) GetSubspace(moduleName string) paramstypes.Subspace {
 	subspace, _ := app.ParamsKeeper.GetSubspace(moduleName)
 	return subspace
 }
 
 // RegisterAPIRoutes registers all application module routes with the provided
 // API server.
-func (app *ReApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
+func (app *CarDexApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
 	clientCtx := apiSvr.ClientCtx
 	// Register new tx routes from grpc-gateway.
 	authtx.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
@@ -836,12 +836,12 @@ func (app *ReApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConf
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.
-func (app *ReApp) RegisterTxService(clientCtx client.Context) {
+func (app *CarDexApp) RegisterTxService(clientCtx client.Context) {
 	authtx.RegisterTxService(app.BaseApp.GRPCQueryRouter(), clientCtx, app.BaseApp.Simulate, app.interfaceRegistry)
 }
 
 // RegisterTendermintService implements the Application.RegisterTendermintService method.
-func (app *ReApp) RegisterTendermintService(clientCtx client.Context) {
+func (app *CarDexApp) RegisterTendermintService(clientCtx client.Context) {
 	tmservice.RegisterTendermintService(
 		app.BaseApp.GRPCQueryRouter(),
 		clientCtx,
@@ -878,53 +878,53 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 }
 
 // SimulationManager implements the SimulationApp interface
-func (app *ReApp) SimulationManager() *module.SimulationManager {
+func (app *CarDexApp) SimulationManager() *module.SimulationManager {
 	return app.sm
 }
 
 // ConsumerApp interface implementations for e2e tests
 
 // GetTxConfig implements the TestingApp interface.
-func (app *ReApp) GetTxConfig() client.TxConfig {
+func (app *CarDexApp) GetTxConfig() client.TxConfig {
 	return app.encodingConfig.TxConfig
 }
 
 // GetIBCKeeper implements the TestingApp interface.
-func (app *ReApp) GetIBCKeeper() *ibckeeper.Keeper {
+func (app *CarDexApp) GetIBCKeeper() *ibckeeper.Keeper {
 	return app.IBCKeeper
 }
 
 // GetStakingKeeper implements the TestingApp interface.
-func (app *ReApp) GetStakingKeeper() core.StakingKeeper {
+func (app *CarDexApp) GetStakingKeeper() core.StakingKeeper {
 	return app.ConsumerKeeper
 }
 
 // GetScopedIBCKeeper implements the TestingApp interface.
-func (app *ReApp) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
+func (app *CarDexApp) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
 	return app.ScopedIBCKeeper
 }
 
 // GetConsumerKeeper implements the ConsumerApp interface.
-func (app *ReApp) GetConsumerKeeper() ccvconsumerkeeper.Keeper {
+func (app *CarDexApp) GetConsumerKeeper() ccvconsumerkeeper.Keeper {
 	return app.ConsumerKeeper
 }
 
 // GetE2eBankKeeper implements the ConsumerApp interface.
-func (app *ReApp) GetTestBankKeeper() e2e.TestBankKeeper {
+func (app *CarDexApp) GetTestBankKeeper() e2e.TestBankKeeper {
 	return app.BankKeeper
 }
 
 // GetE2eAccountKeeper implements the ConsumerApp interface.
-func (app *ReApp) GetTestAccountKeeper() e2e.TestAccountKeeper {
+func (app *CarDexApp) GetTestAccountKeeper() e2e.TestAccountKeeper {
 	return app.AccountKeeper
 }
 
 // GetE2eSlashingKeeper implements the ConsumerApp interface.
-func (app *ReApp) GetTestSlashingKeeper() e2e.TestSlashingKeeper {
+func (app *CarDexApp) GetTestSlashingKeeper() e2e.TestSlashingKeeper {
 	return app.SlashingKeeper
 }
 
 // GetE2eEvidenceKeeper implements the ConsumerApp interface.
-func (app *ReApp) GetTestEvidenceKeeper() e2e.TestEvidenceKeeper {
+func (app *CarDexApp) GetTestEvidenceKeeper() e2e.TestEvidenceKeeper {
 	return app.EvidenceKeeper
 }
