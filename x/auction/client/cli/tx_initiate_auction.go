@@ -7,6 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cobra"
+	"github.com/uwezukwechibuzor/carDex/utils/helpers"
 	"github.com/uwezukwechibuzor/carDex/x/auction/types"
 )
 
@@ -20,7 +21,7 @@ func CmdInitiateAuction() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 
 			// auto generate AuctionID
-			argAuctionID := ""
+			argAuctionID, _ := helpers.GenerateRandomString(10)
 
 			argMinimumBid := args[0]
 
