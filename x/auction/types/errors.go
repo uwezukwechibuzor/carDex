@@ -13,6 +13,7 @@ const (
 	errAuctionDoesNotExists
 	errBidExists
 	errBidIsLessThanMinimum
+	errNotAllowedToBid
 )
 
 var (
@@ -21,4 +22,5 @@ var (
 	ErrAuctionDoesNotExists = sdkerrors.Register(ModuleName, errAuctionDoesNotExists, "auction does not exist")
 	ErrBidExists            = sdkerrors.Register(ModuleName, errBidExists, "bid exists already")
 	ErrBidIsLessThanMinimum = sdkerrors.Register(ModuleName, errBidIsLessThanMinimum, "bid is less than the minimum")
+	ErrNotAllowedToBid      = sdkerrors.Register(ModuleName, errNotAllowedToBid, "creator of auction is not allowed to bid")
 )

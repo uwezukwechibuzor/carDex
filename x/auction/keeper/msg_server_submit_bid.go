@@ -23,6 +23,11 @@ func (k msgServer) SubmitBid(goCtx context.Context, msg *types.MsgSubmitBid) (*t
 		return nil, sdkerrors.Wrapf(types.ErrAuctionDoesNotExists, "Auction: %s", &auction)
 	}
 
+	// creator of auction is not allowed to bid
+	if auction.Creator == msg.Creator {
+		return nil, sdkerrors.Wrapf(types.ErrNotAllowedToBid, "Creator: %s", msg.Creator)
+	}
+
 	// check that this bid does not exist yet
 	bid, found := k.GetBid(ctx, msg.BidID)
 	if found {
