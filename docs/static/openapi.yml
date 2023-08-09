@@ -28831,6 +28831,16 @@ paths:
           in: query
           required: false
           type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
       tags:
         - Query
   /uwezukwechibuzor/carDex/auction/auction/{auctionID}:
@@ -28912,6 +28922,9 @@ paths:
                       type: string
                     creator:
                       type: string
+                    createdAt:
+                      type: string
+                      format: int64
               pagination:
                 type: object
                 properties:
@@ -29004,6 +29017,16 @@ paths:
           in: query
           required: false
           type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
       tags:
         - Query
   /uwezukwechibuzor/carDex/auction/bid/{bidID}:
@@ -29027,6 +29050,9 @@ paths:
                     type: string
                   creator:
                     type: string
+                  createdAt:
+                    type: string
+                    format: int64
         default:
           description: An unexpected error response.
           schema:
@@ -49809,9 +49835,14 @@ definitions:
         type: string
       creator:
         type: string
+      createdAt:
+        type: string
+        format: int64
   uwezukwechibuzor.cardex.auction.MsgInitiateAuctionResponse:
     type: object
   uwezukwechibuzor.cardex.auction.MsgSubmitBidResponse:
+    type: object
+  uwezukwechibuzor.cardex.auction.MsgUpdateBidResponse:
     type: object
   uwezukwechibuzor.cardex.auction.Params:
     type: object
@@ -49884,6 +49915,9 @@ definitions:
               type: string
             creator:
               type: string
+            createdAt:
+              type: string
+              format: int64
       pagination:
         type: object
         properties:
@@ -49948,6 +49982,9 @@ definitions:
             type: string
           creator:
             type: string
+          createdAt:
+            type: string
+            format: int64
   uwezukwechibuzor.cardex.auction.QueryParamsResponse:
     type: object
     properties:

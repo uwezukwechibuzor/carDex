@@ -8,6 +8,7 @@ option go_package = "github.com/uwezukwechibuzor/carDex/x/auction/types";
 service Msg {
   rpc InitiateAuction (MsgInitiateAuction) returns (MsgInitiateAuctionResponse);
   rpc SubmitBid       (MsgSubmitBid      ) returns (MsgSubmitBidResponse      );
+  rpc UpdateBid       (MsgUpdateBid      ) returns (MsgUpdateBidResponse      );
 }
 message MsgInitiateAuction {
   string creator         = 1;
@@ -28,8 +29,18 @@ message MsgSubmitBid {
   string bidID     = 2;
   string auctionID = 3;
   string bidHash   = 4;
-  int64 createdAt = 5;
+  int64  createdAt = 5;
 }
 
 message MsgSubmitBidResponse {}
+
+message MsgUpdateBid {
+  string creator   = 1;
+  string bidID     = 2;
+  string auctionID = 3;
+  string bidHash   = 4;
+  int64  createdAt = 5;
+}
+
+message MsgUpdateBidResponse {}
 

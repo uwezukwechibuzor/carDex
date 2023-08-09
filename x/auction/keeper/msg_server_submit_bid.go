@@ -62,7 +62,7 @@ func (k msgServer) SubmitBid(goCtx context.Context, msg *types.MsgSubmitBid) (*t
 	// Check if the bid creation time is older than the auction initiation time.
 	// If more than 100 blocks, then return error
 	if newBid.CreatedAt > auction.CreatedAt+100 {
-		return nil, sdkerrors.Wrapf(types.ErrBidExists, "Bid: %s", &bid)
+		return nil, sdkerrors.Wrapf(types.ErrAuctionDurationIsOver, "Bid: %s", &bid)
 	}
 
 	// set to store

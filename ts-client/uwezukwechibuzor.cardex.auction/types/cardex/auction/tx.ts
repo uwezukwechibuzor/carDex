@@ -24,9 +24,18 @@ export interface MsgSubmitBid {
   bidID: string;
   auctionID: string;
   bidHash: string;
+  createdAt: number;
 }
 
 export interface MsgSubmitBidResponse {
+}
+
+export interface MsgUpdateBid {
+  creator: string;
+  bidID: string;
+}
+
+export interface MsgUpdateBidResponse {
 }
 
 function createBaseMsgInitiateAuction(): MsgInitiateAuction {
@@ -200,7 +209,7 @@ export const MsgInitiateAuctionResponse = {
 };
 
 function createBaseMsgSubmitBid(): MsgSubmitBid {
-  return { creator: "", bidID: "", auctionID: "", bidHash: "" };
+  return { creator: "", bidID: "", auctionID: "", bidHash: "", createdAt: 0 };
 }
 
 export const MsgSubmitBid = {
@@ -216,6 +225,9 @@ export const MsgSubmitBid = {
     }
     if (message.bidHash !== "") {
       writer.uint32(34).string(message.bidHash);
+    }
+    if (message.createdAt !== 0) {
+      writer.uint32(40).int64(message.createdAt);
     }
     return writer;
   },
@@ -239,6 +251,9 @@ export const MsgSubmitBid = {
         case 4:
           message.bidHash = reader.string();
           break;
+        case 5:
+          message.createdAt = longToNumber(reader.int64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -253,6 +268,7 @@ export const MsgSubmitBid = {
       bidID: isSet(object.bidID) ? String(object.bidID) : "",
       auctionID: isSet(object.auctionID) ? String(object.auctionID) : "",
       bidHash: isSet(object.bidHash) ? String(object.bidHash) : "",
+      createdAt: isSet(object.createdAt) ? Number(object.createdAt) : 0,
     };
   },
 
@@ -262,6 +278,7 @@ export const MsgSubmitBid = {
     message.bidID !== undefined && (obj.bidID = message.bidID);
     message.auctionID !== undefined && (obj.auctionID = message.auctionID);
     message.bidHash !== undefined && (obj.bidHash = message.bidHash);
+    message.createdAt !== undefined && (obj.createdAt = Math.round(message.createdAt));
     return obj;
   },
 
@@ -271,6 +288,7 @@ export const MsgSubmitBid = {
     message.bidID = object.bidID ?? "";
     message.auctionID = object.auctionID ?? "";
     message.bidHash = object.bidHash ?? "";
+    message.createdAt = object.createdAt ?? 0;
     return message;
   },
 };
@@ -314,10 +332,108 @@ export const MsgSubmitBidResponse = {
   },
 };
 
+function createBaseMsgUpdateBid(): MsgUpdateBid {
+  return { creator: "", bidID: "" };
+}
+
+export const MsgUpdateBid = {
+  encode(message: MsgUpdateBid, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.bidID !== "") {
+      writer.uint32(18).string(message.bidID);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateBid {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateBid();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.bidID = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateBid {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      bidID: isSet(object.bidID) ? String(object.bidID) : "",
+    };
+  },
+
+  toJSON(message: MsgUpdateBid): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.bidID !== undefined && (obj.bidID = message.bidID);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateBid>, I>>(object: I): MsgUpdateBid {
+    const message = createBaseMsgUpdateBid();
+    message.creator = object.creator ?? "";
+    message.bidID = object.bidID ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgUpdateBidResponse(): MsgUpdateBidResponse {
+  return {};
+}
+
+export const MsgUpdateBidResponse = {
+  encode(_: MsgUpdateBidResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateBidResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateBidResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgUpdateBidResponse {
+    return {};
+  },
+
+  toJSON(_: MsgUpdateBidResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateBidResponse>, I>>(_: I): MsgUpdateBidResponse {
+    const message = createBaseMsgUpdateBidResponse();
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   InitiateAuction(request: MsgInitiateAuction): Promise<MsgInitiateAuctionResponse>;
   SubmitBid(request: MsgSubmitBid): Promise<MsgSubmitBidResponse>;
+  UpdateBid(request: MsgUpdateBid): Promise<MsgUpdateBidResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -326,6 +442,7 @@ export class MsgClientImpl implements Msg {
     this.rpc = rpc;
     this.InitiateAuction = this.InitiateAuction.bind(this);
     this.SubmitBid = this.SubmitBid.bind(this);
+    this.UpdateBid = this.UpdateBid.bind(this);
   }
   InitiateAuction(request: MsgInitiateAuction): Promise<MsgInitiateAuctionResponse> {
     const data = MsgInitiateAuction.encode(request).finish();
@@ -337,6 +454,12 @@ export class MsgClientImpl implements Msg {
     const data = MsgSubmitBid.encode(request).finish();
     const promise = this.rpc.request("uwezukwechibuzor.cardex.auction.Msg", "SubmitBid", data);
     return promise.then((data) => MsgSubmitBidResponse.decode(new _m0.Reader(data)));
+  }
+
+  UpdateBid(request: MsgUpdateBid): Promise<MsgUpdateBidResponse> {
+    const data = MsgUpdateBid.encode(request).finish();
+    const promise = this.rpc.request("uwezukwechibuzor.cardex.auction.Msg", "UpdateBid", data);
+    return promise.then((data) => MsgUpdateBidResponse.decode(new _m0.Reader(data)));
   }
 }
 

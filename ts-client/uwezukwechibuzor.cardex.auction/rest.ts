@@ -28,11 +28,16 @@ export interface AuctionBid {
   auctionID?: string;
   bidHash?: string;
   creator?: string;
+
+  /** @format int64 */
+  createdAt?: string;
 }
 
 export type AuctionMsgInitiateAuctionResponse = object;
 
 export type AuctionMsgSubmitBidResponse = object;
+
+export type AuctionMsgUpdateBidResponse = object;
 
 /**
  * Params defines the parameters for the module.

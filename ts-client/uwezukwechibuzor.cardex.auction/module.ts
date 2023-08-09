@@ -7,17 +7,18 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgSubmitBid } from "./types/cardex/auction/tx";
+import { MsgUpdateBid } from "./types/cardex/auction/tx";
 import { MsgInitiateAuction } from "./types/cardex/auction/tx";
+import { MsgSubmitBid } from "./types/cardex/auction/tx";
 
 import { Auction as typeAuction} from "./types"
 import { Bid as typeBid} from "./types"
 import { Params as typeParams} from "./types"
 
-export { MsgSubmitBid, MsgInitiateAuction };
+export { MsgUpdateBid, MsgInitiateAuction, MsgSubmitBid };
 
-type sendMsgSubmitBidParams = {
-  value: MsgSubmitBid,
+type sendMsgUpdateBidParams = {
+  value: MsgUpdateBid,
   fee?: StdFee,
   memo?: string
 };
@@ -28,13 +29,23 @@ type sendMsgInitiateAuctionParams = {
   memo?: string
 };
 
-
-type msgSubmitBidParams = {
+type sendMsgSubmitBidParams = {
   value: MsgSubmitBid,
+  fee?: StdFee,
+  memo?: string
+};
+
+
+type msgUpdateBidParams = {
+  value: MsgUpdateBid,
 };
 
 type msgInitiateAuctionParams = {
   value: MsgInitiateAuction,
+};
+
+type msgSubmitBidParams = {
+  value: MsgSubmitBid,
 };
 
 
@@ -67,17 +78,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgSubmitBid({ value, fee, memo }: sendMsgSubmitBidParams): Promise<DeliverTxResponse> {
+		async sendMsgUpdateBid({ value, fee, memo }: sendMsgUpdateBidParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgSubmitBid: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgUpdateBid: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSubmitBid({ value: MsgSubmitBid.fromPartial(value) })
+				let msg = this.msgUpdateBid({ value: MsgUpdateBid.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSubmitBid: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgUpdateBid: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -95,12 +106,26 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgSubmitBid({ value }: msgSubmitBidParams): EncodeObject {
-			try {
-				return { typeUrl: "/uwezukwechibuzor.cardex.auction.MsgSubmitBid", value: MsgSubmitBid.fromPartial( value ) }  
+		async sendMsgSubmitBid({ value, fee, memo }: sendMsgSubmitBidParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSubmitBid: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSubmitBid({ value: MsgSubmitBid.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgSubmitBid: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgSubmitBid: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		
+		msgUpdateBid({ value }: msgUpdateBidParams): EncodeObject {
+			try {
+				return { typeUrl: "/uwezukwechibuzor.cardex.auction.MsgUpdateBid", value: MsgUpdateBid.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateBid: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -109,6 +134,14 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return { typeUrl: "/uwezukwechibuzor.cardex.auction.MsgInitiateAuction", value: MsgInitiateAuction.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgInitiateAuction: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSubmitBid({ value }: msgSubmitBidParams): EncodeObject {
+			try {
+				return { typeUrl: "/uwezukwechibuzor.cardex.auction.MsgSubmitBid", value: MsgSubmitBid.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSubmitBid: Could not create message: ' + e.message)
 			}
 		},
 		
