@@ -7,12 +7,23 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
+import { MsgInitiateAuction } from "./types/cardex/auction/tx";
 
 import { Auction as typeAuction} from "./types"
 import { Params as typeParams} from "./types"
 
-export {  };
+export { MsgInitiateAuction };
 
+type sendMsgInitiateAuctionParams = {
+  value: MsgInitiateAuction,
+  fee?: StdFee,
+  memo?: string
+};
+
+
+type msgInitiateAuctionParams = {
+  value: MsgInitiateAuction,
+};
 
 
 export const registry = new Registry(msgTypes);
@@ -44,6 +55,28 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
+		async sendMsgInitiateAuction({ value, fee, memo }: sendMsgInitiateAuctionParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgInitiateAuction: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgInitiateAuction({ value: MsgInitiateAuction.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgInitiateAuction: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		
+		msgInitiateAuction({ value }: msgInitiateAuctionParams): EncodeObject {
+			try {
+				return { typeUrl: "/uwezukwechibuzor.cardex.auction.MsgInitiateAuction", value: MsgInitiateAuction.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgInitiateAuction: Could not create message: ' + e.message)
+			}
+		},
 		
 	}
 };

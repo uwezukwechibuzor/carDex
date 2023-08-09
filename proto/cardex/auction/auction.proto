@@ -12,4 +12,6 @@ message Auction {
   string carPictureUrl = 6; 
   string status = 7;
   string creator = 8; 
+  int64 createdAt = 9;
+
 }

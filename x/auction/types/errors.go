@@ -7,6 +7,12 @@ import (
 )
 
 // x/auction module sentinel errors
+const (
+	errSample uint32 = iota + 101
+	errAuctionExists
+)
+
 var (
-	ErrSample = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrSample        = sdkerrors.Register(ModuleName, errSample, "sample error")
+	ErrAuctionExists = sdkerrors.Register(ModuleName, errAuctionExists, "auction exists already")
 )

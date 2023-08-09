@@ -1,7 +1,24 @@
 syntax = "proto3";
+
 package uwezukwechibuzor.cardex.auction;
 
 option go_package = "github.com/uwezukwechibuzor/carDex/x/auction/types";
 
 // Msg defines the Msg service.
-service Msg {}
+service Msg {
+  rpc InitiateAuction (MsgInitiateAuction) returns (MsgInitiateAuctionResponse);
+}
+message MsgInitiateAuction {
+  string creator         = 1;
+  string auctionID       = 2;
+  string minimumBid      = 3;
+  string bid             = 4;
+  string auctionDuration = 5;
+  string carDescription  = 6;
+  string carPictureUrl   = 7;
+  string status          = 8;
+  int64 createdAt       = 9;
+}
+
+message MsgInitiateAuctionResponse {}
+
