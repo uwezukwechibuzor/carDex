@@ -14,17 +14,21 @@ var _ = strconv.Itoa(0)
 
 func CmdInitiateAuction() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "initiate-auction [auction-id] [minimum-bid] [bid] [auction-duration] [car-description] [car-picture-url] [status]",
+		Use:   "initiate-auction [minimum-bid] [car-description] [car-picture-url]",
 		Short: "Broadcast message initiate-auction",
 		Args:  cobra.ExactArgs(7),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			argAuctionID := args[0]
-			argMinimumBid := args[1]
-			argBid := args[2]
-			argAuctionDuration := args[3]
-			argCarDescription := args[4]
-			argCarPictureUrl := args[5]
-			argStatus := args[6]
+
+			// auto generate AuctionID
+			argAuctionID := ""
+
+			argMinimumBid := args[0]
+
+			// Bid should be set after the auction duration has ended
+			argBid := ""
+
+			argCarDescription := args[1]
+			argCarPictureUrl := args[2]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -36,10 +40,8 @@ func CmdInitiateAuction() *cobra.Command {
 				argAuctionID,
 				argMinimumBid,
 				argBid,
-				argAuctionDuration,
 				argCarDescription,
 				argCarPictureUrl,
-				argStatus,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

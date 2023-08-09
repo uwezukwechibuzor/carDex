@@ -9,16 +9,14 @@ const TypeMsgInitiateAuction = "initiate_auction"
 
 var _ sdk.Msg = &MsgInitiateAuction{}
 
-func NewMsgInitiateAuction(creator string, auctionID string, minimumBid string, bid string, auctionDuration string, carDescription string, carPictureUrl string, status string) *MsgInitiateAuction {
+func NewMsgInitiateAuction(creator string, auctionID string, minimumBid string, bid string, carDescription string, carPictureUrl string) *MsgInitiateAuction {
 	return &MsgInitiateAuction{
-		Creator:         creator,
-		AuctionID:       auctionID,
-		MinimumBid:      minimumBid,
-		Bid:             bid,
-		AuctionDuration: auctionDuration,
-		CarDescription:  carDescription,
-		CarPictureUrl:   carPictureUrl,
-		Status:          status,
+		Creator:        creator,
+		AuctionID:      auctionID,
+		MinimumBid:     minimumBid,
+		Bid:            bid,
+		CarDescription: carDescription,
+		CarPictureUrl:  carPictureUrl,
 	}
 }
 
