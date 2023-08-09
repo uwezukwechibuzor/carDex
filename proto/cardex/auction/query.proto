@@ -7,6 +7,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "cardex/auction/params.proto";
 import "cardex/auction/auction.proto";
+import "cardex/auction/bid.proto";
 
 option go_package = "github.com/uwezukwechibuzor/carDex/x/auction/types";
 
@@ -28,6 +29,16 @@ service Query {
     option (google.api.http).get = "/uwezukwechibuzor/carDex/auction/auction";
   
   }
+  
+  // Queries a list of Bid items.
+  rpc Bid    (QueryGetBidRequest) returns (QueryGetBidResponse) {
+    option (google.api.http).get = "/uwezukwechibuzor/carDex/auction/bid/{bidID}";
+  
+  }
+  rpc BidAll (QueryAllBidRequest) returns (QueryAllBidResponse) {
+    option (google.api.http).get = "/uwezukwechibuzor/carDex/auction/bid";
+  
+  }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -40,7 +51,7 @@ message QueryParamsResponse {
 }
 
 message QueryGetAuctionRequest {
-   string auctionID = 1;
+  string auctionID = 1;
 }
 
 message QueryGetAuctionResponse {
@@ -53,6 +64,23 @@ message QueryAllAuctionRequest {
 
 message QueryAllAuctionResponse {
   repeated Auction                                Auction    = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetBidRequest {
+   string bidID = 1; 
+}
+
+message QueryGetBidResponse {
+  Bid Bid = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllBidRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllBidResponse {
+  repeated Bid                                    Bid        = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

@@ -1,10 +1,11 @@
 import { Client, registry, MissingWalletError } from 'uwezukwechibuzor-carDex-client-ts'
 
 import { Auction } from "uwezukwechibuzor-carDex-client-ts/uwezukwechibuzor.cardex.auction/types"
+import { Bid } from "uwezukwechibuzor-carDex-client-ts/uwezukwechibuzor.cardex.auction/types"
 import { Params } from "uwezukwechibuzor-carDex-client-ts/uwezukwechibuzor.cardex.auction/types"
 
 
-export { Auction, Params };
+export { Auction, Bid, Params };
 
 function initClient(vuexGetters) {
 	return new Client(vuexGetters['common/env/getEnv'], vuexGetters['common/wallet/signer'])
@@ -38,9 +39,12 @@ const getDefaultState = () => {
 				Params: {},
 				Auction: {},
 				AuctionAll: {},
+				Bid: {},
+				BidAll: {},
 				
 				_Structure: {
 						Auction: getStructure(Auction.fromPartial({})),
+						Bid: getStructure(Bid.fromPartial({})),
 						Params: getStructure(Params.fromPartial({})),
 						
 		},
@@ -87,6 +91,18 @@ export default {
 						(<any> params).query=null
 					}
 			return state.AuctionAll[JSON.stringify(params)] ?? {}
+		},
+				getBid: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.Bid[JSON.stringify(params)] ?? {}
+		},
+				getBidAll: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.BidAll[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -187,6 +203,54 @@ export default {
 				return getters['getAuctionAll']( { params: {...key}, query}) ?? {}
 			} catch (e) {
 				throw new Error('QueryClient:QueryAuctionAll API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryBid({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const client = initClient(rootGetters);
+				let value= (await client.UwezukwechibuzorCardexAuction.query.queryBid( key.id)).data
+				
+					
+				commit('QUERY', { query: 'Bid', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryBid', payload: { options: { all }, params: {...key},query }})
+				return getters['getBid']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryBid API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryBidAll({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const client = initClient(rootGetters);
+				let value= (await client.UwezukwechibuzorCardexAuction.query.queryBidAll(query ?? undefined)).data
+				
+					
+				while (all && (<any> value).pagination && (<any> value).pagination.next_key!=null) {
+					let next_values=(await client.UwezukwechibuzorCardexAuction.query.queryBidAll({...query ?? {}, 'pagination.key':(<any> value).pagination.next_key} as any)).data
+					value = mergeResults(value, next_values);
+				}
+				commit('QUERY', { query: 'BidAll', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryBidAll', payload: { options: { all }, params: {...key},query }})
+				return getters['getBidAll']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryBidAll API Node Unavailable. Could not perform query: ' + e.message)
 				
 			}
 		},

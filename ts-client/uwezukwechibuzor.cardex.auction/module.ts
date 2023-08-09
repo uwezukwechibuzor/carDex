@@ -10,6 +10,7 @@ import { Api } from "./rest";
 import { MsgInitiateAuction } from "./types/cardex/auction/tx";
 
 import { Auction as typeAuction} from "./types"
+import { Bid as typeBid} from "./types"
 import { Params as typeParams} from "./types"
 
 export { MsgInitiateAuction };
@@ -101,6 +102,7 @@ class SDKModule {
 		this.updateTX(client);
 		this.structure =  {
 						Auction: getStructure(typeAuction.fromPartial({})),
+						Bid: getStructure(typeBid.fromPartial({})),
 						Params: getStructure(typeParams.fromPartial({})),
 						
 		};

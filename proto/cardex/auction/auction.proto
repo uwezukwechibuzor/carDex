@@ -13,5 +13,4 @@ message Auction {
   string status = 7;
   string creator = 8; 
   int64 createdAt = 9;
-
 }

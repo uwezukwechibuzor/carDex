@@ -5,6 +5,7 @@ package uwezukwechibuzor.cardex.auction;
 import "gogoproto/gogo.proto";
 import "cardex/auction/params.proto";
 import "cardex/auction/auction.proto";
+import "cardex/auction/bid.proto";
 
 option go_package = "github.com/uwezukwechibuzor/carDex/x/auction/types";
 
@@ -13,5 +14,7 @@ message GenesisState {
            Params  params       = 1 [(gogoproto.nullable) = false];
   repeated Auction auctionList  = 2 [(gogoproto.nullable) = false];
            uint64  auctionCount = 3;
+  repeated Bid     bidList      = 4 [(gogoproto.nullable) = false];
+           uint64  bidCount     = 5;
 }
 

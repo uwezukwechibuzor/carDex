@@ -18,6 +18,17 @@ export interface AuctionAuction {
   carPictureUrl?: string;
   status?: string;
   creator?: string;
+
+  /** @format int64 */
+  createdAt?: string;
+}
+
+export interface AuctionBid {
+  /** @format uint64 */
+  id?: string;
+  bidID?: string;
+  auctionID?: string;
+  bidHash?: string;
 }
 
 export type AuctionMsgInitiateAuctionResponse = object;
@@ -42,8 +53,27 @@ export interface AuctionQueryAllAuctionResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface AuctionQueryAllBidResponse {
+  Bid?: AuctionBid[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface AuctionQueryGetAuctionResponse {
   Auction?: AuctionAuction;
+}
+
+export interface AuctionQueryGetBidResponse {
+  Bid?: AuctionBid;
 }
 
 /**
@@ -297,6 +327,47 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryAuction = (auctionId: string, params: RequestParams = {}) =>
     this.request<AuctionQueryGetAuctionResponse, RpcStatus>({
       path: `/uwezukwechibuzor/carDex/auction/auction/${auctionId}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryBidAll
+   * @request GET:/uwezukwechibuzor/carDex/auction/bid
+   */
+  queryBidAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<AuctionQueryAllBidResponse, RpcStatus>({
+      path: `/uwezukwechibuzor/carDex/auction/bid`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryBid
+   * @summary Queries a list of Bid items.
+   * @request GET:/uwezukwechibuzor/carDex/auction/bid/{id}
+   */
+  queryBid = (id: string, params: RequestParams = {}) =>
+    this.request<AuctionQueryGetBidResponse, RpcStatus>({
+      path: `/uwezukwechibuzor/carDex/auction/bid/${id}`,
       method: "GET",
       format: "json",
       ...params,

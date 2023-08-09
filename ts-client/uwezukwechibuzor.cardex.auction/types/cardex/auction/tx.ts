@@ -1,4 +1,5 @@
 /* eslint-disable */
+import Long from "long";
 import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "uwezukwechibuzor.cardex.auction";
@@ -12,6 +13,7 @@ export interface MsgInitiateAuction {
   carDescription: string;
   carPictureUrl: string;
   status: string;
+  createdAt: number;
 }
 
 export interface MsgInitiateAuctionResponse {
@@ -27,6 +29,7 @@ function createBaseMsgInitiateAuction(): MsgInitiateAuction {
     carDescription: "",
     carPictureUrl: "",
     status: "",
+    createdAt: 0,
   };
 }
 
@@ -55,6 +58,9 @@ export const MsgInitiateAuction = {
     }
     if (message.status !== "") {
       writer.uint32(66).string(message.status);
+    }
+    if (message.createdAt !== 0) {
+      writer.uint32(72).int64(message.createdAt);
     }
     return writer;
   },
@@ -90,6 +96,9 @@ export const MsgInitiateAuction = {
         case 8:
           message.status = reader.string();
           break;
+        case 9:
+          message.createdAt = longToNumber(reader.int64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -108,6 +117,7 @@ export const MsgInitiateAuction = {
       carDescription: isSet(object.carDescription) ? String(object.carDescription) : "",
       carPictureUrl: isSet(object.carPictureUrl) ? String(object.carPictureUrl) : "",
       status: isSet(object.status) ? String(object.status) : "",
+      createdAt: isSet(object.createdAt) ? Number(object.createdAt) : 0,
     };
   },
 
@@ -121,6 +131,7 @@ export const MsgInitiateAuction = {
     message.carDescription !== undefined && (obj.carDescription = message.carDescription);
     message.carPictureUrl !== undefined && (obj.carPictureUrl = message.carPictureUrl);
     message.status !== undefined && (obj.status = message.status);
+    message.createdAt !== undefined && (obj.createdAt = Math.round(message.createdAt));
     return obj;
   },
 
@@ -134,6 +145,7 @@ export const MsgInitiateAuction = {
     message.carDescription = object.carDescription ?? "";
     message.carPictureUrl = object.carPictureUrl ?? "";
     message.status = object.status ?? "";
+    message.createdAt = object.createdAt ?? 0;
     return message;
   },
 };
@@ -199,6 +211,25 @@ interface Rpc {
   request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
+declare var self: any | undefined;
+declare var window: any | undefined;
+declare var global: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
+  throw "Unable to locate global object";
+})();
+
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin ? T
@@ -209,6 +240,18 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

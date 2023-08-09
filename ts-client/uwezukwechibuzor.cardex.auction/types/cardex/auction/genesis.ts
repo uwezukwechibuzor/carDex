@@ -2,6 +2,7 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Auction } from "./auction";
+import { Bid } from "./bid";
 import { Params } from "./params";
 
 export const protobufPackage = "uwezukwechibuzor.cardex.auction";
@@ -11,10 +12,12 @@ export interface GenesisState {
   params: Params | undefined;
   auctionList: Auction[];
   auctionCount: number;
+  bidList: Bid[];
+  bidCount: number;
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { params: undefined, auctionList: [], auctionCount: 0 };
+  return { params: undefined, auctionList: [], auctionCount: 0, bidList: [], bidCount: 0 };
 }
 
 export const GenesisState = {
@@ -27,6 +30,12 @@ export const GenesisState = {
     }
     if (message.auctionCount !== 0) {
       writer.uint32(24).uint64(message.auctionCount);
+    }
+    for (const v of message.bidList) {
+      Bid.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.bidCount !== 0) {
+      writer.uint32(40).uint64(message.bidCount);
     }
     return writer;
   },
@@ -47,6 +56,12 @@ export const GenesisState = {
         case 3:
           message.auctionCount = longToNumber(reader.uint64() as Long);
           break;
+        case 4:
+          message.bidList.push(Bid.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.bidCount = longToNumber(reader.uint64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -60,6 +75,8 @@ export const GenesisState = {
       params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
       auctionList: Array.isArray(object?.auctionList) ? object.auctionList.map((e: any) => Auction.fromJSON(e)) : [],
       auctionCount: isSet(object.auctionCount) ? Number(object.auctionCount) : 0,
+      bidList: Array.isArray(object?.bidList) ? object.bidList.map((e: any) => Bid.fromJSON(e)) : [],
+      bidCount: isSet(object.bidCount) ? Number(object.bidCount) : 0,
     };
   },
 
@@ -72,6 +89,12 @@ export const GenesisState = {
       obj.auctionList = [];
     }
     message.auctionCount !== undefined && (obj.auctionCount = Math.round(message.auctionCount));
+    if (message.bidList) {
+      obj.bidList = message.bidList.map((e) => e ? Bid.toJSON(e) : undefined);
+    } else {
+      obj.bidList = [];
+    }
+    message.bidCount !== undefined && (obj.bidCount = Math.round(message.bidCount));
     return obj;
   },
 
@@ -82,6 +105,8 @@ export const GenesisState = {
       : undefined;
     message.auctionList = object.auctionList?.map((e) => Auction.fromPartial(e)) || [];
     message.auctionCount = object.auctionCount ?? 0;
+    message.bidList = object.bidList?.map((e) => Bid.fromPartial(e)) || [];
+    message.bidCount = object.bidCount ?? 0;
     return message;
   },
 };

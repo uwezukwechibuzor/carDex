@@ -1,7 +1,9 @@
 /* eslint-disable */
+import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { PageRequest, PageResponse } from "../../cosmos/base/query/v1beta1/pagination";
 import { Auction } from "./auction";
+import { Bid } from "./bid";
 import { Params } from "./params";
 
 export const protobufPackage = "uwezukwechibuzor.cardex.auction";
@@ -30,6 +32,23 @@ export interface QueryAllAuctionRequest {
 
 export interface QueryAllAuctionResponse {
   Auction: Auction[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetBidRequest {
+  id: number;
+}
+
+export interface QueryGetBidResponse {
+  Bid: Bid | undefined;
+}
+
+export interface QueryAllBidRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllBidResponse {
+  Bid: Bid[];
   pagination: PageResponse | undefined;
 }
 
@@ -332,6 +351,215 @@ export const QueryAllAuctionResponse = {
   },
 };
 
+function createBaseQueryGetBidRequest(): QueryGetBidRequest {
+  return { id: 0 };
+}
+
+export const QueryGetBidRequest = {
+  encode(message: QueryGetBidRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).uint64(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetBidRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetBidRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetBidRequest {
+    return { id: isSet(object.id) ? Number(object.id) : 0 };
+  },
+
+  toJSON(message: QueryGetBidRequest): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = Math.round(message.id));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetBidRequest>, I>>(object: I): QueryGetBidRequest {
+    const message = createBaseQueryGetBidRequest();
+    message.id = object.id ?? 0;
+    return message;
+  },
+};
+
+function createBaseQueryGetBidResponse(): QueryGetBidResponse {
+  return { Bid: undefined };
+}
+
+export const QueryGetBidResponse = {
+  encode(message: QueryGetBidResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Bid !== undefined) {
+      Bid.encode(message.Bid, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetBidResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetBidResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.Bid = Bid.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetBidResponse {
+    return { Bid: isSet(object.Bid) ? Bid.fromJSON(object.Bid) : undefined };
+  },
+
+  toJSON(message: QueryGetBidResponse): unknown {
+    const obj: any = {};
+    message.Bid !== undefined && (obj.Bid = message.Bid ? Bid.toJSON(message.Bid) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetBidResponse>, I>>(object: I): QueryGetBidResponse {
+    const message = createBaseQueryGetBidResponse();
+    message.Bid = (object.Bid !== undefined && object.Bid !== null) ? Bid.fromPartial(object.Bid) : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllBidRequest(): QueryAllBidRequest {
+  return { pagination: undefined };
+}
+
+export const QueryAllBidRequest = {
+  encode(message: QueryAllBidRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllBidRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllBidRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllBidRequest {
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
+  },
+
+  toJSON(message: QueryAllBidRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllBidRequest>, I>>(object: I): QueryAllBidRequest {
+    const message = createBaseQueryAllBidRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllBidResponse(): QueryAllBidResponse {
+  return { Bid: [], pagination: undefined };
+}
+
+export const QueryAllBidResponse = {
+  encode(message: QueryAllBidResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.Bid) {
+      Bid.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllBidResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllBidResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.Bid.push(Bid.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllBidResponse {
+    return {
+      Bid: Array.isArray(object?.Bid) ? object.Bid.map((e: any) => Bid.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
+  },
+
+  toJSON(message: QueryAllBidResponse): unknown {
+    const obj: any = {};
+    if (message.Bid) {
+      obj.Bid = message.Bid.map((e) => e ? Bid.toJSON(e) : undefined);
+    } else {
+      obj.Bid = [];
+    }
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllBidResponse>, I>>(object: I): QueryAllBidResponse {
+    const message = createBaseQueryAllBidResponse();
+    message.Bid = object.Bid?.map((e) => Bid.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -339,6 +567,9 @@ export interface Query {
   /** Queries a list of Auction items. */
   Auction(request: QueryGetAuctionRequest): Promise<QueryGetAuctionResponse>;
   AuctionAll(request: QueryAllAuctionRequest): Promise<QueryAllAuctionResponse>;
+  /** Queries a list of Bid items. */
+  Bid(request: QueryGetBidRequest): Promise<QueryGetBidResponse>;
+  BidAll(request: QueryAllBidRequest): Promise<QueryAllBidResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -348,6 +579,8 @@ export class QueryClientImpl implements Query {
     this.Params = this.Params.bind(this);
     this.Auction = this.Auction.bind(this);
     this.AuctionAll = this.AuctionAll.bind(this);
+    this.Bid = this.Bid.bind(this);
+    this.BidAll = this.BidAll.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -366,11 +599,42 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("uwezukwechibuzor.cardex.auction.Query", "AuctionAll", data);
     return promise.then((data) => QueryAllAuctionResponse.decode(new _m0.Reader(data)));
   }
+
+  Bid(request: QueryGetBidRequest): Promise<QueryGetBidResponse> {
+    const data = QueryGetBidRequest.encode(request).finish();
+    const promise = this.rpc.request("uwezukwechibuzor.cardex.auction.Query", "Bid", data);
+    return promise.then((data) => QueryGetBidResponse.decode(new _m0.Reader(data)));
+  }
+
+  BidAll(request: QueryAllBidRequest): Promise<QueryAllBidResponse> {
+    const data = QueryAllBidRequest.encode(request).finish();
+    const promise = this.rpc.request("uwezukwechibuzor.cardex.auction.Query", "BidAll", data);
+    return promise.then((data) => QueryAllBidResponse.decode(new _m0.Reader(data)));
+  }
 }
 
 interface Rpc {
   request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+declare var global: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
@@ -382,6 +646,18 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

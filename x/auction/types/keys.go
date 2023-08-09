@@ -22,3 +22,8 @@ const (
 	AuctionKey      = "Auction/value/"
 	AuctionCountKey = "Auction/count/"
 )
+
+const (
+	BidKey      = "Bid/value/"
+	BidCountKey = "Bid/count/"
+)

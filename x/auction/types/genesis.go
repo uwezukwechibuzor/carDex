@@ -12,6 +12,7 @@ const DefaultIndex uint64 = 1
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		AuctionList: []Auction{},
+		BidList:     []Bid{},
 		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
@@ -32,6 +33,19 @@ func (gs GenesisState) Validate() error {
 			return fmt.Errorf("auction id should be lower or equal than the last id")
 		}
 		auctionIdMap[elem.AuctionID] = true
+	}
+	// Check for duplicated ID in bid
+	bidIdMap := make(map[string]bool)
+	bidCount := gs.GetBidCount()
+	for _, elem := range gs.BidList {
+		if _, ok := bidIdMap[elem.BidID]; ok {
+			return fmt.Errorf("duplicated id for bid")
+		}
+		bidID, _ := strconv.ParseUint(elem.BidHash, 10, 64)
+		if bidID >= bidCount {
+			return fmt.Errorf("bid id should be lower or equal than the last id")
+		}
+		bidIdMap[elem.BidID] = true
 	}
 	// this line is used by starport scaffolding # genesis/types/validate
 
