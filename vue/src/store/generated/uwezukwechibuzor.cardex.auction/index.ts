@@ -217,7 +217,7 @@ export default {
 			try {
 				const key = params ?? {};
 				const client = initClient(rootGetters);
-				let value= (await client.UwezukwechibuzorCardexAuction.query.queryBid( key.id)).data
+				let value= (await client.UwezukwechibuzorCardexAuction.query.queryBid( key.bidID)).data
 				
 					
 				commit('QUERY', { query: 'Bid', key: { params: {...key}, query}, value })
@@ -256,6 +256,20 @@ export default {
 		},
 		
 		
+		async sendMsgSubmitBid({ rootGetters }, { value, fee = {amount: [], gas: "200000"}, memo = '' }) {
+			try {
+				const client=await initClient(rootGetters)
+				const fullFee = Array.isArray(fee)  ? {amount: fee, gas: "200000"} :fee;
+				const result = await client.UwezukwechibuzorCardexAuction.tx.sendMsgSubmitBid({ value, fee: fullFee, memo })
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgSubmitBid:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgSubmitBid:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
 		async sendMsgInitiateAuction({ rootGetters }, { value, fee = {amount: [], gas: "200000"}, memo = '' }) {
 			try {
 				const client=await initClient(rootGetters)
@@ -271,6 +285,19 @@ export default {
 			}
 		},
 		
+		async MsgSubmitBid({ rootGetters }, { value }) {
+			try {
+				const client=initClient(rootGetters)
+				const msg = await client.UwezukwechibuzorCardexAuction.tx.msgSubmitBid({value})
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgSubmitBid:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgSubmitBid:Create Could not create message: ' + e.message)
+				}
+			}
+		},
 		async MsgInitiateAuction({ rootGetters }, { value }) {
 			try {
 				const client=initClient(rootGetters)

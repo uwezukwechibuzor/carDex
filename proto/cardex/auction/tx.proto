@@ -7,6 +7,7 @@ option go_package = "github.com/uwezukwechibuzor/carDex/x/auction/types";
 // Msg defines the Msg service.
 service Msg {
   rpc InitiateAuction (MsgInitiateAuction) returns (MsgInitiateAuctionResponse);
+  rpc SubmitBid       (MsgSubmitBid      ) returns (MsgSubmitBidResponse      );
 }
 message MsgInitiateAuction {
   string creator         = 1;
@@ -17,8 +18,18 @@ message MsgInitiateAuction {
   string carDescription  = 6;
   string carPictureUrl   = 7;
   string status          = 8;
-  int64 createdAt       = 9;
+  int64  createdAt       = 9;
 }
 
 message MsgInitiateAuctionResponse {}
+
+message MsgSubmitBid {
+  string creator   = 1;
+  string bidID     = 2;
+  string auctionID = 3;
+  string bidHash   = 4;
+  int64 createdAt = 5;
+}
+
+message MsgSubmitBidResponse {}
 

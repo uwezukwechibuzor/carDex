@@ -28904,14 +28904,13 @@ paths:
                 items:
                   type: object
                   properties:
-                    id:
-                      type: string
-                      format: uint64
                     bidID:
                       type: string
                     auctionID:
                       type: string
                     bidHash:
+                      type: string
+                    creator:
                       type: string
               pagination:
                 type: object
@@ -29007,7 +29006,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /uwezukwechibuzor/carDex/auction/bid/{id}:
+  /uwezukwechibuzor/carDex/auction/bid/{bidID}:
     get:
       summary: Queries a list of Bid items.
       operationId: UwezukwechibuzorCardexAuctionBid
@@ -29020,14 +29019,13 @@ paths:
               Bid:
                 type: object
                 properties:
-                  id:
-                    type: string
-                    format: uint64
                   bidID:
                     type: string
                   auctionID:
                     type: string
                   bidHash:
+                    type: string
+                  creator:
                     type: string
         default:
           description: An unexpected error response.
@@ -29048,11 +29046,10 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: id
+        - name: bidID
           in: path
           required: true
           type: string
-          format: uint64
       tags:
         - Query
   /uwezukwechibuzor/carDex/auction/params:
@@ -49804,16 +49801,17 @@ definitions:
   uwezukwechibuzor.cardex.auction.Bid:
     type: object
     properties:
-      id:
-        type: string
-        format: uint64
       bidID:
         type: string
       auctionID:
         type: string
       bidHash:
         type: string
+      creator:
+        type: string
   uwezukwechibuzor.cardex.auction.MsgInitiateAuctionResponse:
+    type: object
+  uwezukwechibuzor.cardex.auction.MsgSubmitBidResponse:
     type: object
   uwezukwechibuzor.cardex.auction.Params:
     type: object
@@ -49878,14 +49876,13 @@ definitions:
         items:
           type: object
           properties:
-            id:
-              type: string
-              format: uint64
             bidID:
               type: string
             auctionID:
               type: string
             bidHash:
+              type: string
+            creator:
               type: string
       pagination:
         type: object
@@ -49943,14 +49940,13 @@ definitions:
       Bid:
         type: object
         properties:
-          id:
-            type: string
-            format: uint64
           bidID:
             type: string
           auctionID:
             type: string
           bidHash:
+            type: string
+          creator:
             type: string
   uwezukwechibuzor.cardex.auction.QueryParamsResponse:
     type: object

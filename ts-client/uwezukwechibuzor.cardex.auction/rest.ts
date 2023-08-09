@@ -24,14 +24,15 @@ export interface AuctionAuction {
 }
 
 export interface AuctionBid {
-  /** @format uint64 */
-  id?: string;
   bidID?: string;
   auctionID?: string;
   bidHash?: string;
+  creator?: string;
 }
 
 export type AuctionMsgInitiateAuctionResponse = object;
+
+export type AuctionMsgSubmitBidResponse = object;
 
 /**
  * Params defines the parameters for the module.
@@ -363,11 +364,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryBid
    * @summary Queries a list of Bid items.
-   * @request GET:/uwezukwechibuzor/carDex/auction/bid/{id}
+   * @request GET:/uwezukwechibuzor/carDex/auction/bid/{bidID}
    */
-  queryBid = (id: string, params: RequestParams = {}) =>
+  queryBid = (bidId: string, params: RequestParams = {}) =>
     this.request<AuctionQueryGetBidResponse, RpcStatus>({
-      path: `/uwezukwechibuzor/carDex/auction/bid/${id}`,
+      path: `/uwezukwechibuzor/carDex/auction/bid/${bidId}`,
       method: "GET",
       format: "json",
       ...params,

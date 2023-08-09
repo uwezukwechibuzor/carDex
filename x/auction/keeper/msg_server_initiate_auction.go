@@ -39,7 +39,7 @@ func (k msgServer) InitiateAuction(goCtx context.Context, msg *types.MsgInitiate
 	newAuction.Status = "open"
 
 	// bidding should not be possible if it exceeds more than 100 blocks from the point the auction was initiated
-	newAuction.CreatedAt = ctx.BlockHeight() + 100
+	newAuction.CreatedAt = ctx.BlockHeight()
 
 	// set to store
 	k.SetAuction(ctx, msg.AuctionID, newAuction)
