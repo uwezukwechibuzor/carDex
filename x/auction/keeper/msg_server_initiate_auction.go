@@ -24,6 +24,11 @@ func (k msgServer) InitiateAuction(goCtx context.Context, msg *types.MsgInitiate
 		return nil, sdkerrors.Wrapf(types.ErrAuctionExists, "Auction: %s", &auction)
 	}
 
+	// check that this is not empty
+	if msg.MinimumBid == "" {
+		return nil, sdkerrors.Wrapf(err, "MinimumBid  is empty: %s", msg.MinimumBid)
+	}
+
 	newAuction := types.Auction{
 		AuctionID:       msg.AuctionID,
 		MinimumBid:      msg.MinimumBid,
