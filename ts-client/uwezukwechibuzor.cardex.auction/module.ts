@@ -7,31 +7,26 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgInitiateAuction } from "./types/cardex/auction/tx";
-import { MsgSubmitBid } from "./types/cardex/auction/tx";
 import { MsgCancelBid } from "./types/cardex/auction/tx";
+import { MsgInitiateAuction } from "./types/cardex/auction/tx";
 import { MsgUpdateBid } from "./types/cardex/auction/tx";
+import { MsgSubmitBid } from "./types/cardex/auction/tx";
+import { MsgFinalizeBid } from "./types/cardex/auction/tx";
 
 import { Auction as typeAuction} from "./types"
 import { Bid as typeBid} from "./types"
 import { Params as typeParams} from "./types"
 
-export { MsgInitiateAuction, MsgSubmitBid, MsgCancelBid, MsgUpdateBid };
-
-type sendMsgInitiateAuctionParams = {
-  value: MsgInitiateAuction,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgSubmitBidParams = {
-  value: MsgSubmitBid,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgCancelBid, MsgInitiateAuction, MsgUpdateBid, MsgSubmitBid, MsgFinalizeBid };
 
 type sendMsgCancelBidParams = {
   value: MsgCancelBid,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgInitiateAuctionParams = {
+  value: MsgInitiateAuction,
   fee?: StdFee,
   memo?: string
 };
@@ -42,21 +37,37 @@ type sendMsgUpdateBidParams = {
   memo?: string
 };
 
+type sendMsgSubmitBidParams = {
+  value: MsgSubmitBid,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgFinalizeBidParams = {
+  value: MsgFinalizeBid,
+  fee?: StdFee,
+  memo?: string
+};
+
+
+type msgCancelBidParams = {
+  value: MsgCancelBid,
+};
 
 type msgInitiateAuctionParams = {
   value: MsgInitiateAuction,
+};
+
+type msgUpdateBidParams = {
+  value: MsgUpdateBid,
 };
 
 type msgSubmitBidParams = {
   value: MsgSubmitBid,
 };
 
-type msgCancelBidParams = {
-  value: MsgCancelBid,
-};
-
-type msgUpdateBidParams = {
-  value: MsgUpdateBid,
+type msgFinalizeBidParams = {
+  value: MsgFinalizeBid,
 };
 
 
@@ -89,34 +100,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgInitiateAuction({ value, fee, memo }: sendMsgInitiateAuctionParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgInitiateAuction: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgInitiateAuction({ value: MsgInitiateAuction.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgInitiateAuction: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgSubmitBid({ value, fee, memo }: sendMsgSubmitBidParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSubmitBid: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSubmitBid({ value: MsgSubmitBid.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSubmitBid: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgCancelBid({ value, fee, memo }: sendMsgCancelBidParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgCancelBid: Unable to sign Tx. Signer is not present.')
@@ -128,6 +111,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendMsgCancelBid: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgInitiateAuction({ value, fee, memo }: sendMsgInitiateAuctionParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgInitiateAuction: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgInitiateAuction({ value: MsgInitiateAuction.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgInitiateAuction: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -145,12 +142,56 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendMsgSubmitBid({ value, fee, memo }: sendMsgSubmitBidParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSubmitBid: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSubmitBid({ value: MsgSubmitBid.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgSubmitBid: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgFinalizeBid({ value, fee, memo }: sendMsgFinalizeBidParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgFinalizeBid: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgFinalizeBid({ value: MsgFinalizeBid.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgFinalizeBid: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		
+		msgCancelBid({ value }: msgCancelBidParams): EncodeObject {
+			try {
+				return { typeUrl: "/uwezukwechibuzor.cardex.auction.MsgCancelBid", value: MsgCancelBid.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCancelBid: Could not create message: ' + e.message)
+			}
+		},
 		
 		msgInitiateAuction({ value }: msgInitiateAuctionParams): EncodeObject {
 			try {
 				return { typeUrl: "/uwezukwechibuzor.cardex.auction.MsgInitiateAuction", value: MsgInitiateAuction.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgInitiateAuction: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateBid({ value }: msgUpdateBidParams): EncodeObject {
+			try {
+				return { typeUrl: "/uwezukwechibuzor.cardex.auction.MsgUpdateBid", value: MsgUpdateBid.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateBid: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -162,19 +203,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgCancelBid({ value }: msgCancelBidParams): EncodeObject {
+		msgFinalizeBid({ value }: msgFinalizeBidParams): EncodeObject {
 			try {
-				return { typeUrl: "/uwezukwechibuzor.cardex.auction.MsgCancelBid", value: MsgCancelBid.fromPartial( value ) }  
+				return { typeUrl: "/uwezukwechibuzor.cardex.auction.MsgFinalizeBid", value: MsgFinalizeBid.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCancelBid: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgUpdateBid({ value }: msgUpdateBidParams): EncodeObject {
-			try {
-				return { typeUrl: "/uwezukwechibuzor.cardex.auction.MsgUpdateBid", value: MsgUpdateBid.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateBid: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgFinalizeBid: Could not create message: ' + e.message)
 			}
 		},
 		

@@ -49840,6 +49840,8 @@ definitions:
         format: int64
   uwezukwechibuzor.cardex.auction.MsgCancelBidResponse:
     type: object
+  uwezukwechibuzor.cardex.auction.MsgFinalizeBidResponse:
+    type: object
   uwezukwechibuzor.cardex.auction.MsgInitiateAuctionResponse:
     type: object
   uwezukwechibuzor.cardex.auction.MsgSubmitBidResponse:

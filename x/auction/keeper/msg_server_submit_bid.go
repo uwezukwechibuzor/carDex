@@ -11,6 +11,7 @@ import (
 
 func (k msgServer) SubmitBid(goCtx context.Context, msg *types.MsgSubmitBid) (*types.MsgSubmitBidResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
 	// Validate the message creator
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {

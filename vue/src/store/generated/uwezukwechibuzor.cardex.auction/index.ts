@@ -256,34 +256,6 @@ export default {
 		},
 		
 		
-		async sendMsgInitiateAuction({ rootGetters }, { value, fee = {amount: [], gas: "200000"}, memo = '' }) {
-			try {
-				const client=await initClient(rootGetters)
-				const fullFee = Array.isArray(fee)  ? {amount: fee, gas: "200000"} :fee;
-				const result = await client.UwezukwechibuzorCardexAuction.tx.sendMsgInitiateAuction({ value, fee: fullFee, memo })
-				return result
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgInitiateAuction:Init Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new Error('TxClient:MsgInitiateAuction:Send Could not broadcast Tx: '+ e.message)
-				}
-			}
-		},
-		async sendMsgSubmitBid({ rootGetters }, { value, fee = {amount: [], gas: "200000"}, memo = '' }) {
-			try {
-				const client=await initClient(rootGetters)
-				const fullFee = Array.isArray(fee)  ? {amount: fee, gas: "200000"} :fee;
-				const result = await client.UwezukwechibuzorCardexAuction.tx.sendMsgSubmitBid({ value, fee: fullFee, memo })
-				return result
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgSubmitBid:Init Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new Error('TxClient:MsgSubmitBid:Send Could not broadcast Tx: '+ e.message)
-				}
-			}
-		},
 		async sendMsgCancelBid({ rootGetters }, { value, fee = {amount: [], gas: "200000"}, memo = '' }) {
 			try {
 				const client=await initClient(rootGetters)
@@ -295,6 +267,20 @@ export default {
 					throw new Error('TxClient:MsgCancelBid:Init Could not initialize signing client. Wallet is required.')
 				}else{
 					throw new Error('TxClient:MsgCancelBid:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
+		async sendMsgInitiateAuction({ rootGetters }, { value, fee = {amount: [], gas: "200000"}, memo = '' }) {
+			try {
+				const client=await initClient(rootGetters)
+				const fullFee = Array.isArray(fee)  ? {amount: fee, gas: "200000"} :fee;
+				const result = await client.UwezukwechibuzorCardexAuction.tx.sendMsgInitiateAuction({ value, fee: fullFee, memo })
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgInitiateAuction:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgInitiateAuction:Send Could not broadcast Tx: '+ e.message)
 				}
 			}
 		},
@@ -312,7 +298,48 @@ export default {
 				}
 			}
 		},
+		async sendMsgSubmitBid({ rootGetters }, { value, fee = {amount: [], gas: "200000"}, memo = '' }) {
+			try {
+				const client=await initClient(rootGetters)
+				const fullFee = Array.isArray(fee)  ? {amount: fee, gas: "200000"} :fee;
+				const result = await client.UwezukwechibuzorCardexAuction.tx.sendMsgSubmitBid({ value, fee: fullFee, memo })
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgSubmitBid:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgSubmitBid:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
+		async sendMsgFinalizeBid({ rootGetters }, { value, fee = {amount: [], gas: "200000"}, memo = '' }) {
+			try {
+				const client=await initClient(rootGetters)
+				const fullFee = Array.isArray(fee)  ? {amount: fee, gas: "200000"} :fee;
+				const result = await client.UwezukwechibuzorCardexAuction.tx.sendMsgFinalizeBid({ value, fee: fullFee, memo })
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgFinalizeBid:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgFinalizeBid:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
 		
+		async MsgCancelBid({ rootGetters }, { value }) {
+			try {
+				const client=initClient(rootGetters)
+				const msg = await client.UwezukwechibuzorCardexAuction.tx.msgCancelBid({value})
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgCancelBid:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgCancelBid:Create Could not create message: ' + e.message)
+				}
+			}
+		},
 		async MsgInitiateAuction({ rootGetters }, { value }) {
 			try {
 				const client=initClient(rootGetters)
@@ -323,6 +350,19 @@ export default {
 					throw new Error('TxClient:MsgInitiateAuction:Init Could not initialize signing client. Wallet is required.')
 				} else{
 					throw new Error('TxClient:MsgInitiateAuction:Create Could not create message: ' + e.message)
+				}
+			}
+		},
+		async MsgUpdateBid({ rootGetters }, { value }) {
+			try {
+				const client=initClient(rootGetters)
+				const msg = await client.UwezukwechibuzorCardexAuction.tx.msgUpdateBid({value})
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgUpdateBid:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgUpdateBid:Create Could not create message: ' + e.message)
 				}
 			}
 		},
@@ -339,29 +379,16 @@ export default {
 				}
 			}
 		},
-		async MsgCancelBid({ rootGetters }, { value }) {
+		async MsgFinalizeBid({ rootGetters }, { value }) {
 			try {
 				const client=initClient(rootGetters)
-				const msg = await client.UwezukwechibuzorCardexAuction.tx.msgCancelBid({value})
+				const msg = await client.UwezukwechibuzorCardexAuction.tx.msgFinalizeBid({value})
 				return msg
 			} catch (e) {
 				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgCancelBid:Init Could not initialize signing client. Wallet is required.')
+					throw new Error('TxClient:MsgFinalizeBid:Init Could not initialize signing client. Wallet is required.')
 				} else{
-					throw new Error('TxClient:MsgCancelBid:Create Could not create message: ' + e.message)
-				}
-			}
-		},
-		async MsgUpdateBid({ rootGetters }, { value }) {
-			try {
-				const client=initClient(rootGetters)
-				const msg = await client.UwezukwechibuzorCardexAuction.tx.msgUpdateBid({value})
-				return msg
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgUpdateBid:Init Could not initialize signing client. Wallet is required.')
-				} else{
-					throw new Error('TxClient:MsgUpdateBid:Create Could not create message: ' + e.message)
+					throw new Error('TxClient:MsgFinalizeBid:Create Could not create message: ' + e.message)
 				}
 			}
 		},

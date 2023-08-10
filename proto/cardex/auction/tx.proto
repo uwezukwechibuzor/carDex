@@ -10,6 +10,7 @@ service Msg {
   rpc SubmitBid       (MsgSubmitBid      ) returns (MsgSubmitBidResponse      );
   rpc UpdateBid       (MsgUpdateBid      ) returns (MsgUpdateBidResponse      );
   rpc CancelBid       (MsgCancelBid      ) returns (MsgCancelBidResponse      );
+  rpc FinalizeBid     (MsgFinalizeBid    ) returns (MsgFinalizeBidResponse    );
 }
 message MsgInitiateAuction {
   string creator         = 1;
@@ -51,4 +52,11 @@ message MsgCancelBid {
 }
 
 message MsgCancelBidResponse {}
+
+message MsgFinalizeBid {
+  string creator   = 1;
+  string bidValue  = 4;
+}
+
+message MsgFinalizeBidResponse {}
 
