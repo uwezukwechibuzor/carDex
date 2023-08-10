@@ -12,6 +12,7 @@ import (
 
 var _ = strconv.Itoa(0)
 
+// CmdCancelBid is the cli for bid cancellation
 func CmdCancelBid() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "cancel-bid [bid-id]",

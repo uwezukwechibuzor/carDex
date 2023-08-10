@@ -13,6 +13,7 @@ import (
 
 var _ = strconv.Itoa(0)
 
+// CmdInitiateAuction is the cli for initiating an auction
 func CmdInitiateAuction() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "initiate-auction [minimum-bid] [car-description] [car-picture-url]",

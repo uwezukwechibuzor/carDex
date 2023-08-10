@@ -8,6 +8,7 @@ import (
 	"github.com/uwezukwechibuzor/carDex/x/auction/types"
 )
 
+// InitiateAuction is used by the seller to initiate an auction with the some initial parameters on CarDex Chain
 func (k msgServer) InitiateAuction(goCtx context.Context, msg *types.MsgInitiateAuction) (*types.MsgInitiateAuctionResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 

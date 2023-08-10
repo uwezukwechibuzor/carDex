@@ -14,6 +14,7 @@ import (
 
 var _ = strconv.Itoa(0)
 
+// CmdUpdateBid is the cli for updating Bid
 func CmdUpdateBid() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update-bid [bid-id] [auction-id] [bid-value]",
@@ -24,6 +25,7 @@ func CmdUpdateBid() *cobra.Command {
 			argBidID := args[0]
 			argAuction := args[1]
 			argBidValue := args[2]
+
 			// find a hash of the bid value
 			// this ensures the bid Values are sealed(encrypted) until auction expires
 			// when updating, this also seals the bidvalue

@@ -11,6 +11,7 @@ import (
 	"github.com/uwezukwechibuzor/carDex/x/auction/types"
 )
 
+// FinalizeBid executes and reveals bids after auction duration has ended in the CarDex Chain
 func (k msgServer) FinalizeBid(goCtx context.Context, msg *types.MsgFinalizeBid) (*types.MsgFinalizeBidResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -64,8 +65,14 @@ func (k msgServer) FinalizeBid(goCtx context.Context, msg *types.MsgFinalizeBid)
 		return nil, sdkerrors.Wrapf(err, "You are not the highest bidder: %s", bid.BidHash)
 	}
 
-	// update auction
+	// get auction
 	auction, _ := k.GetAuction(ctx, bid.AuctionID)
+
+	// check that auction can not be finalised if auction duration has not ended
+	if ctx.BlockHeight() < auction.CreatedAt+100 {
+		return nil, sdkerrors.Wrapf(err, "Auction Duration has not ended yet: %d", auction.CreatedAt)
+	}
+	// update auction
 	auction.Status = "closed"
 	auction.Bid = msg.BidValue
 
@@ -75,7 +82,7 @@ func (k msgServer) FinalizeBid(goCtx context.Context, msg *types.MsgFinalizeBid)
 	if err != nil {
 		panic(err)
 	}
-	
+
 	// send tokens from a bidder's account to the seller
 	sdkError := k.bankKeeper.SendCoins(ctx, sdk.AccAddress(msg.Creator), sdk.AccAddress(auction.Creator), bidAmount)
 	if sdkError != nil {

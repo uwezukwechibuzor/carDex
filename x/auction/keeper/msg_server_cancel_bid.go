@@ -8,6 +8,7 @@ import (
 	"github.com/uwezukwechibuzor/carDex/x/auction/types"
 )
 
+// CancelBid cancels bid in the CarDex Chain
 func (k msgServer) CancelBid(goCtx context.Context, msg *types.MsgCancelBid) (*types.MsgCancelBidResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -25,7 +26,7 @@ func (k msgServer) CancelBid(goCtx context.Context, msg *types.MsgCancelBid) (*t
 
 	// check that allows bid to be cancelled only during the auction duration
 	auction, _ := k.GetAuction(ctx, bid.AuctionID)
-	if bid.CreatedAt < auction.CreatedAt {
+	if bid.CreatedAt < auction.CreatedAt+100 {
 		return nil, sdkerrors.Wrapf(err, "you are not allowed to cancel bids that the auction duration has expired %s", &auction)
 	}
 

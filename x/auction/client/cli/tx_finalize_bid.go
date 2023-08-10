@@ -12,6 +12,7 @@ import (
 
 var _ = strconv.Itoa(0)
 
+// CmdFinalizeBid is the cli for finalising bid
 func CmdFinalizeBid() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "finalize-bid [bid-value]",

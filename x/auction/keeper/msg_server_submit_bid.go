@@ -9,6 +9,7 @@ import (
 	"github.com/uwezukwechibuzor/carDex/x/auction/types"
 )
 
+// SubmitBid is used by the Buyers to send their bids as a transaction to the CarDex chain
 func (k msgServer) SubmitBid(goCtx context.Context, msg *types.MsgSubmitBid) (*types.MsgSubmitBidResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 

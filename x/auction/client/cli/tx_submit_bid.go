@@ -14,6 +14,7 @@ import (
 
 var _ = strconv.Itoa(0)
 
+// CmdSubmitBid is the cli for bid submission
 func CmdSubmitBid() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "submit-bid [auction-id] [bid-value]",
