@@ -1,5 +1,5 @@
 # CARDEX CHAIN
-**CARDEX CHAIN** is a blockchain built with Cosmos SDK leveraging Replicated security. 
+**CarDex Chain** is a revolutionary blockchain-based platform built with the Cosmos SDK, designed to decentralize, secure, and bring transparency to car auctions. It utilizes Cosmos SDK's Interchain Security to provide a robust security layer. 
 
 ## Documentation
 
